@@ -1,3 +1,5 @@
+import { WeatherInfo } from './models/weather';
+import { environment } from './../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
@@ -7,9 +9,11 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class WeaterService {
-  weatherFullInformation: any;
+  weatherFullInformation: WeatherInfo;
   latitude;
   longitude;
+  apiUrl = environment.apiUrl
+  apiKey = environment.apiKey
 
 
   constructor(private http: HttpClient) { }
@@ -28,15 +32,12 @@ export class WeaterService {
   }
 
 
-  getWeatherInformation() {
-    return new Promise((resolve, rejects) => {
-      this.http.get(`https://api.openweathermap.org/data/2.5/onecall?lat=${this.latitude}&lon=${this.longitude}&units=metric&appid=9475fddef7be250d0ff4b3e8600bb50a`).subscribe(res => {
-        console.log(res)
-        let inform = JSON.stringify(res)
-        localStorage.setItem('informWeather', inform)
-        resolve(res)
-      })
-    })
+  async getWeatherInformation() {
+      const res = await this.http.get<WeatherInfo>(`${this.apiUrl}?lat=${this.latitude}&lon=${this.longitude}&units=metric&appid=${this.apiKey}`).toPromise()
+      console.log(res)
+      let inform = JSON.stringify(res)
+      localStorage.setItem('informWeather', inform)
+      return res
   }
 
 
@@ -47,13 +48,9 @@ export class WeaterService {
 
   }
 
-  getlocalstorage() {
-    return new Promise((resolve, rejects) => {
-      let weatherstr = localStorage.getItem('informWeather')
-      this.weatherFullInformation = JSON.parse(weatherstr)
-      //  console.log('lok')
-      resolve(weatherstr)
-    })
+  async getlocalstorage() {
+    let weatherstr = localStorage.getItem('informWeather')
+    this.weatherFullInformation = JSON.parse(weatherstr) as WeatherInfo
   }
 
   getHourlyWeaterInformation() {
