@@ -12,7 +12,7 @@ export interface WeatherBasic {
     dt: number,
     sunrise: number,
     sunset: number,
-    temp: number,
+    temp: number | any,
     feels_like: number,
     pressure: number,
     humidity: number,

@@ -5,35 +5,39 @@
       <div class="currentCity">
         {{city}}
       </div>
-      <div class="currentWeater" [class.nightorLight]="isNight">
+      <div class="currentWeater" [class.night]="isNight">
         <div>{{ currentDate|date}}</div>
         <div><img [src]="currentIconUrl"></div>
         <div class="currentDiscription">{{currentWeaterDescription}} </div>
         <div class="currentTemperature">{{currentTemperature}}°</div>
       </div>
-      <div><button class="button" (click)="togleHourlyWeaterSection()">Hourly weater</button></div>
+      <div>
+        <button class="button" (click)="togleHourlyWeaterSection()">Hourly weater</button>
+      </div>
     </div>
 
-
     <div class="hourly forcast" *ngIf='ishourlyWeaterSection' >
-      <div class="forcastItem" [class.nightorLight]="isLight |nigthorLight:param " *ngFor="let param of hourlyWeater">
+      <div class="forcastItem" [class.night]="hourlyInfo | nigthorLight " *ngFor="let hourlyInfo of hourlyWeater">
         <div class="forcastTime">
-          <p>{{param.dt*1000  | date:"EEEE dd/MM/yy HH:mm:ss " }} </p>
+          <p>{{hourlyInfo.dt*1000  | date:"EEEE dd/MM/yy HH:mm:ss " }} </p>
         </div>
-        <div class="forcastTemperature"><img src="{{param.weather[0].icon |iIcon}}" alt="ICON"> {{param.temp}}°
-          <p>{{param.weather[0].description}}</p>
+        <div class="forcastTemperature">
+          <img [src]="hourlyInfo.weather[0].icon |iIcon" alt="ICON"> 
+          {{hourlyInfo.temp}}°
+          <p>{{hourlyInfo.weather[0].description}}</p>
         </div>
       </div>
     </div>
 
-
     <div class="forcast">
-      <div class="forcastItem" *ngFor="let param of dailyWeather">
+      <div class="forcastItem" *ngFor="let daylyIno of dailyWeather">
         <div class="forcastTime">
-          <p>{{param.dt*1000 | date:"EEEE dd/MM/yy  "}} </p>
+          <p>{{daylyIno.dt*1000 | date:"EEEE dd/MM/yy  "}} </p>
         </div>
-        <div class="forcastTemperature"><img src="{{param.weather[0].icon |iIcon}}" alt="ICON"> {{param.temp.max}}°
-          <p>{{param.weather[0].description}}</p>
+        <div class="forcastTemperature">
+          <img [src]="daylyIno.weather[0].icon | iIcon" alt="ICON"> 
+          {{daylyIno.temp.max}}°
+          <p>{{daylyIno.weather[0].description}}</p>
         </div>
 
       </div>

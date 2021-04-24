@@ -1,3 +1,4 @@
+import { WeatherBasic } from './models/weather';
 import { Pipe, PipeTransform } from '@angular/core';
 import { WeaterService } from './weater.service';
 
@@ -8,17 +9,9 @@ import { WeaterService } from './weater.service';
 export class NightorLightPipe implements PipeTransform {
   constructor(private weaterService: WeaterService) { }
 
-  transform(value: boolean, date: any): boolean {
-    let naitorLith = date.weather[0].icon.slice(2)
-    // console.log(naitorLith)
-    if (naitorLith === "d") {
-      return false
-    }
-    else {
-      return true
-    }
-
-
+  transform(value: WeatherBasic): boolean {
+    let naitorLith = value.weather[0].icon.slice(2)
+    return naitorLith !== "d";
   }
 
 }

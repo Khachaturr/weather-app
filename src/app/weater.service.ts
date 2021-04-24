@@ -1,4 +1,4 @@
-import { WeatherInfo } from './models/weather';
+import { WeatherInfo, WeatherBasic } from './models/weather';
 import { environment } from './../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -10,8 +10,8 @@ import { Injectable } from '@angular/core';
 })
 export class WeaterService {
   weatherFullInformation: WeatherInfo;
-  latitude;
-  longitude;
+  latitude: number;
+  longitude: number;
   apiUrl = environment.apiUrl
   apiKey = environment.apiKey
 
@@ -21,11 +21,8 @@ export class WeaterService {
   getGeocord() {
     return new Promise((resolv, reject) => {
       navigator.geolocation.getCurrentPosition((res) => {
-        this.latitude = res.coords.latitude.toFixed(6)
-        this.longitude = res.coords.longitude.toFixed(6)
-        // console.log(res)
-        // console.log(this.latitude)
-        // console.log(this.longitude)
+        this.latitude = +res.coords.latitude.toFixed(6)
+        this.longitude = +res.coords.longitude.toFixed(6)
         resolv(res)
       })
     })
@@ -34,16 +31,14 @@ export class WeaterService {
 
   async getWeatherInformation() {
       const res = await this.http.get<WeatherInfo>(`${this.apiUrl}?lat=${this.latitude}&lon=${this.longitude}&units=metric&appid=${this.apiKey}`).toPromise()
-      console.log(res)
       let inform = JSON.stringify(res)
       localStorage.setItem('informWeather', inform)
       return res
   }
 
 
-  makeMillisecondsADay(millisecond) {
+  makeMillisecondsADay(millisecond: number): number {
     let milliseconds = millisecond * 1000
-    // console.log(milliseconds)
     return milliseconds
 
   }
@@ -53,7 +48,7 @@ export class WeaterService {
     this.weatherFullInformation = JSON.parse(weatherstr) as WeatherInfo
   }
 
-  getHourlyWeaterInformation() {
+  getHourlyWeaterInformation(): WeatherBasic[] {
     return this.weatherFullInformation.hourly
   }
 

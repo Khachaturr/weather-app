@@ -1,3 +1,4 @@
+import { WeatherBasic } from './models/weather';
 
 import { Component, OnInit } from '@angular/core';
 import { WeaterService } from './weater.service';
@@ -23,8 +24,8 @@ export class AppComponent implements OnInit {
   isLight: boolean;
 
   ishourlyWeaterSection: boolean = false;
-  hourlyWeater: any[] = [];
-  dailyWeather: any[] = [];
+  hourlyWeater: WeatherBasic[] = [];
+  dailyWeather: WeatherBasic[] = [];
 
   refreshInterval: any
 
@@ -69,7 +70,6 @@ export class AppComponent implements OnInit {
 
   gethourlyWeaterInform() {
     this.hourlyWeater = [...this.weaterService.getHourlyWeaterInformation()]
-    console.log(this.hourlyWeater)
   }
 
   getDailyWeaterInformation() {
@@ -77,12 +77,10 @@ export class AppComponent implements OnInit {
   }
 
   checkNightorLight() {
-    console.log(this.currentDate)
     let nightorLight = this.weaterService.weatherFullInformation.current.weather[0].icon.slice(2)
-    // console.log(nightorLight)
+    
     if (nightorLight === 'd') {
       this.isNight = false
-
     } else {
       this.isNight = true
     }
